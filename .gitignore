@@ -1,1 +1,4 @@
 test_images/*
+out/*
+mini_test/*
+files.txt
