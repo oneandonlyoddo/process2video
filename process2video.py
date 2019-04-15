@@ -1,11 +1,20 @@
-#import argparse
+import argparse
 import os
 import subprocess
 import sys
 #path = "./process"
-process_path = sys.argv[1]
-video_out_path = sys.argv[2]
-fps = sys.argv[3]
+
+parser = argparse.ArgumentParser(description='Process Images to Video Sequence')
+
+parser.add_argument('--in_path', help='The root path of the process folders')
+parser.add_argument('--out_path', help='Where the video file will be saved')
+parser.add_argument('--fps', type=float, help='Frames per second or speed of the video')
+
+args = parser.parse_args()
+
+process_path = args.in_path
+video_out_path = args.out_path
+fps = args.fps
 
 all_folders = []
 all_images = []
