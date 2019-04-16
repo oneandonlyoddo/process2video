@@ -16,9 +16,6 @@ args = parser.parse_args()
 process_path = args.in_path
 video_out_path = args.out_path
 fps = args.fps
-
-all_folders = []
-all_images = []
 filter_term = args.filter_term
 
 def get_folders(path, depth=0, maxdepth=4):
@@ -54,14 +51,12 @@ def write_file_list(files, out_path):
     return out_path
     
 def ffmpeg_the_shit(file_list, out_path):
-    #cmd = ["ffmpeg", "-f", "concat", "-r", "1/2", "-i", file_list, "-crf", "20", "-vf", "fps=8", "format=yuv420p", out_path]
-    #cmd = "ffmpeg -y -f concat -r 1/2 -safe 0 -i "+file_list+" -crf 20 -vf fps=8 -hide_banner -o "+ out_path
     cmd = "ffmpeg -y -f concat -r "+str(fps)+" -safe 0 -i "+file_list+" -vsync 0 -vcodec libx264 -vf \"scale=iw*min(1920/iw\,1080/ih):ih*min(1920/iw\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\,1080/ih))/2:(1080-ih*min(1920/iw\,1080/ih))/2,format=yuv420p\" -r "+str(fps)+" -crf 20 -hide_banner "+ out_path
-    #cmd = "ffmpeg -y -f concat -r "+str(fps)+" -safe 0 -i "+file_list+" -vsync 0 -vf 'scale=iw*min(1920/iw\,1080/ih):ih*min(1920/iw\,1080/ih)' -r "+str(fps)+" -crf 20 -hide_banner "+ out_path
-    #params = ["-f", "concat", "-r", "1/2", "-i", list.txt -vf "scale=iw*min(1920/iw\,1080/ih):ih*min(1920/iw\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\,1080/ih))/2:(1080-ih*min(1920/iw\,1080/ih))/2,fps=8,format=yuv420p" -crf 20 video.mp4
-    
     print (cmd)
-    subprocess.call(cmd, shell=True)
+    return subprocess.call(cmd, shell=True)
+
+all_folders = []
+all_images = []
 
 get_folders(process_path)
 
