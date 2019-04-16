@@ -72,4 +72,4 @@ if filter_term != None:
 
 out_path = write_file_list(all_images, "./files.txt")
 exit_code = ffmpeg_the_shit(out_path, video_out_path)
-print (exit_code)
+print ("ffmpeg finished with exit code: " + str(exit_code))
