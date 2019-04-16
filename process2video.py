@@ -9,6 +9,7 @@ parser = argparse.ArgumentParser(description='Process Images to Video Sequence')
 parser.add_argument('--in_path', help='The root path of the process folders')
 parser.add_argument('--out_path', help='Where the video file will be saved')
 parser.add_argument('--fps', type=float, help='Frames per second or speed of the video')
+parser.add_argument('--filter_term', help='Only use frames with this term in their file path or name')
 
 args = parser.parse_args()
 
@@ -18,6 +19,7 @@ fps = args.fps
 
 all_folders = []
 all_images = []
+filter_term = args.filter_term
 
 def get_folders(path, depth=0, maxdepth=4):
     folders = os.listdir(path)
@@ -39,8 +41,10 @@ def is_image(image_path):
 def get_images_from_folder(folder_path):
     files = os.listdir(folder_path)
     images = [folder_path+"/"+file for file in files if is_image(folder_path+"/"+file)]
-    
     return images
+
+def filter_by_term(file_paths, term):
+    return [file_path for file_path in file_paths if term.lower() in file_path.lower()]
 
 def write_file_list(files, out_path):
     with open(out_path,"w+") as f: 
@@ -67,6 +71,9 @@ for folder in all_folders:
     imgs = get_images_from_folder(folder)
     all_images.extend(imgs)
 all_images.sort()
+
+if filter_term != None:
+    all_images = filter_by_term(all_images, filter_term)
 
 out_path = write_file_list(all_images, "./files.txt")
 exit_code = ffmpeg_the_shit(out_path, video_out_path)
